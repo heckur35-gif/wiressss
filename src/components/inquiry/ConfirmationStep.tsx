@@ -25,19 +25,20 @@ const ConfirmationStep = ({ data }: ConfirmationStepProps) => {
       addInquiryToStorage(data);
       console.log("Submitting inquiry:", data);
 
-      // Save to Supabase if configured and user is authenticated
-      if (isSupabaseConfigured && user) {
+      // Save to Supabase if configured
+      if (isSupabaseConfigured) {
         await saveInquiry({
-          userId: user.id,
           userType: data.userType,
-          location: data.address,
+          fullName: data.name || 'Not provided',
+          phone: data.phone,
+          email: data.email,
+          address: data.address,
+          pincode: data.pincode,
           productName: data.brand,
-          productSpecification: data.color,
-          quantity: data.quantity,
-          contactName: data.name,
-          contactEmail: data.email,
-          contactPhone: data.phone,
-          additionalRequirements: `Unit: ${data.unit}`
+          brand: data.brand,
+          color: data.color,
+          quantity: parseFloat(data.quantity) || 0,
+          unit: data.unit
         });
       }
 

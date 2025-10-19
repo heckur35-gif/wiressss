@@ -46,20 +46,22 @@ export const OwnerAuthProvider = ({ children }: { children: React.ReactNode }) =
     initializeOwnerAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          const isOwner = await checkIsOwner(session.user.id);
-          if (isOwner) {
-            setOwner({ id: session.user.id, phone: session.user.phone });
-            setIsAuthenticated(true);
+      (event, session) => {
+        (async () => {
+          if (session?.user) {
+            const isOwner = await checkIsOwner(session.user.id);
+            if (isOwner) {
+              setOwner({ id: session.user.id, phone: session.user.phone });
+              setIsAuthenticated(true);
+            } else {
+              setOwner(null);
+              setIsAuthenticated(false);
+            }
           } else {
             setOwner(null);
             setIsAuthenticated(false);
           }
-        } else {
-          setOwner(null);
-          setIsAuthenticated(false);
-        }
+        })();
       }
     );
 

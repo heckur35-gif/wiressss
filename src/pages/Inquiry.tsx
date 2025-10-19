@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StepIndicator from "@/components/inquiry/StepIndicator";
 import UserTypeStep from "@/components/inquiry/UserTypeStep";
-import VerificationStep from "@/components/inquiry/VerificationStep";
 import ContactStep from "@/components/inquiry/ContactStep";
 import LocationStep from "@/components/inquiry/LocationStep";
 import ProductStep from "@/components/inquiry/ProductStep";
@@ -41,7 +40,7 @@ const Inquiry = () => {
     unit: "metres",
   });
 
-  const totalSteps = 6;
+  const totalSteps = 5;
 
   const updateFormData = (data: Partial<InquiryData>) => {
     setFormData((prev) => ({ ...prev, ...data }));
@@ -64,14 +63,12 @@ const Inquiry = () => {
       case 1:
         return <UserTypeStep data={formData} updateData={updateFormData} onNext={nextStep} />;
       case 2:
-        return <VerificationStep data={formData} updateData={updateFormData} onNext={nextStep} />;
-      case 3:
         return <ContactStep data={formData} updateData={updateFormData} onNext={nextStep} />;
-      case 4:
+      case 3:
         return <LocationStep data={formData} updateData={updateFormData} onNext={nextStep} />;
-      case 5:
+      case 4:
         return <ProductStep data={formData} updateData={updateFormData} onNext={nextStep} />;
-      case 6:
+      case 5:
         return <ConfirmationStep data={formData} />;
       default:
         return null;

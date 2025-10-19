@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
-import { User, Mail, MapPin } from "lucide-react";
+import { User, Mail, Phone } from "lucide-react";
 import { InquiryData } from "@/pages/Inquiry";
 import { toast } from "sonner";
 
@@ -16,14 +16,19 @@ interface ContactStepProps {
 
 const ContactStep = ({ data, updateData, onNext }: ContactStepProps) => {
   const [name, setName] = useState(data.name);
+  const [phone, setPhone] = useState(data.phone);
   const [email, setEmail] = useState(data.email);
-  const [address, setAddress] = useState(data.address);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !address) {
+    if (!phone || !email) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (phone.length !== 10) {
+      toast.error("Please enter a valid 10-digit phone number");
       return;
     }
 
@@ -32,7 +37,7 @@ const ContactStep = ({ data, updateData, onNext }: ContactStepProps) => {
       return;
     }
 
-    updateData({ name, email, address });
+    updateData({ name, phone, email, verified: true });
     toast.success("Contact details saved");
     onNext();
   };
@@ -64,6 +69,25 @@ const ContactStep = ({ data, updateData, onNext }: ContactStepProps) => {
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="phone">
+              Phone Number <span className="text-destructive">*</span>
+            </Label>
+            <div className="relative">
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="Enter 10-digit number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                maxLength={10}
+                required
+                className="pl-10"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="email">
               Email Address <span className="text-destructive">*</span>
             </Label>
@@ -77,23 +101,6 @@ const ContactStep = ({ data, updateData, onNext }: ContactStepProps) => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="pl-10"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="address">
-              Address <span className="text-destructive">*</span>
-            </Label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Textarea
-                id="address"
-                placeholder="Enter your complete address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-                className="pl-10 min-h-24"
               />
             </div>
           </div>

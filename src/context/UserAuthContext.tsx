@@ -66,28 +66,30 @@ export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
     initializeAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          const { data: userData } = await supabase
-            .from('users')
-            .select('*')
-            .eq('id', session.user.id)
-            .maybeSingle();
+      (event, session) => {
+        (async () => {
+          if (session?.user) {
+            const { data: userData } = await supabase
+              .from('users')
+              .select('*')
+              .eq('id', session.user.id)
+              .maybeSingle();
 
-          if (userData) {
-            setUser({
-              id: userData.id,
-              email: userData.email,
-              phone_number: userData.phone_number,
-              full_name: userData.full_name,
-              address: userData.address,
-            });
-            setCartUserId(userData.id);
+            if (userData) {
+              setUser({
+                id: userData.id,
+                email: userData.email,
+                phone_number: userData.phone_number,
+                full_name: userData.full_name,
+                address: userData.address,
+              });
+              setCartUserId(userData.id);
+            }
+          } else {
+            setUser(null);
+            setCartUserId(null);
           }
-        } else {
-          setUser(null);
-          setCartUserId(null);
-        }
+        })();
       }
     );
 
