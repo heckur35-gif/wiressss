@@ -107,10 +107,27 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: linear-gradient(180deg, hsl(0 0% 0% / 0.35), hsl(0 0% 0% / 0.35)), url("https://cdn.builder.io/api/v1/image/assets%2F5bc2344dc6cd41faafd6490f68c6c16c%2Fb8c7a6790f5d4f70937ee6299a2e5289?format=webp&width=800");
     background-repeat: no-repeat;
     background-size: cover;
-    background-attachment: fixed;
     background-position: right top;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
   }
 }
